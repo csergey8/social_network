@@ -1,22 +1,30 @@
-.App {
-  text-align: center;
+.app-wrapper {
+  display: grid;
+
+  grid-template-areas: "header header"
+                      "nav content";
+  grid-template-rows: 60px 1fr;
+  grid-template-columns: 2fr 10fr;
+  grid-gap: 10px;
+  width: 80%;
+  height: 100px;
+  
 }
 
-.App-logo {
-  height: 40vmin;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.nav {
+  grid-area: nav;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #09d3ac;
+.nav a {
+  text-decoration: none;
+}
+
+.nav .active {
+  color: #dd4411;
+}
+
+.content {
+  grid-area: content;
 }
