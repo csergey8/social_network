@@ -1,14 +1,16 @@
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
 const GET_USERS = 'GET_USERS';
+const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
+const SET_TOTAL_USERS_COUNT = 'SET_TOTAL_USERS_COUNT';
+const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 
 const initialState = {
-    users: [
-        { id: 1, subscribed: true, imgUrl: 'http://zornet.ru/_fr/19/1457300.png', fullName: 'Steve', status: 'Hi', location: { city: 'Kyiv', country: 'Ukraine'}},
-        { id: 2, subscribed: false, imgUrl: 'http://zornet.ru/_fr/19/1457300.png', fullName: 'Steve', status: 'Hi', location: { city: 'Kyiv', country: 'Ukraine'}},
-        { id: 3, subscribed: true, imgUrl: 'http://zornet.ru/_fr/19/1457300.png', fullName: 'Steve', status: 'Hi', location: { city: 'Kyiv', country: 'Ukraine'}},
-        { id: 4, subscribed: false, imgUrl: 'http://zornet.ru/_fr/19/1457300.png', fullName: 'Steve', status: 'Hi', location: { city: 'Kyiv', country: 'Ukraine'}}
-    ]
+    users: [],
+    pageSize: 5,
+    totalUsersCount: 0,
+    currentPage: 1,
+    isFetching: false
 }
 const UsersReducer = (state = initialState, action) => {
 
@@ -37,10 +39,25 @@ const UsersReducer = (state = initialState, action) => {
         case GET_USERS:
             return {
                 ...state,
-                users: [...state.users, ...action.users]
+                users: action.users
+            }
+
+        case SET_CURRENT_PAGE:
+            return {
+                ...state,
+                currentPage: action.page
+            }
+        case SET_TOTAL_USERS_COUNT:
+            return {
+                ...state,
+                totalUsersCount: action.count
+            }
+        case TOGGLE_IS_FETCHING:
+            return {
+                ...state,
+                isFetching: !state.isFetching
             }
         default:
-        
         return state
             
     }
@@ -51,3 +68,6 @@ export default UsersReducer;
 export const followActionCreator = id => ({ type: FOLLOW, id })
 export const unfollowActionCreator = id => ({ type: UNFOLLOW, id})
 export const getUsersActionCreator = users => ({ type: GET_USERS, users })
+export const setCurrentPageActionCreator = page => ({ type: SET_CURRENT_PAGE, page })
+export const setTotalUsersCountActionCreator = count => ({ type: SET_TOTAL_USERS_COUNT, count })
+export const toggleIsFetchingActionCreator = () => ({ type: TOGGLE_IS_FETCHING });

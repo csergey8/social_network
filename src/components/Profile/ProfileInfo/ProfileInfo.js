@@ -1,9 +1,14 @@
 import React from 'react';
+import Preloader from '../../utils/Preloader';
 
-const ProfileInfo = () => {
+const ProfileInfo = props => {
+  if(!props.profile) {
+    return <Preloader />
+  }
   return (
     <div>
-      Profile Info Avatar
+      <img src={props.profile.photos.small} />
+      AVA
     </div>
   );
 };
