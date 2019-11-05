@@ -2,12 +2,14 @@ import React from 'react';
 import classes from './Header.module.css';
 import { Link } from 'react-router-dom';
 
-const Header = () => {
+const Header = props => {
   return (
     <div className={classes.header}>
       <div>Header</div>
       <div>
-        <Link to="/login">Login</Link>
+      { 
+        props.isAuth ? props.login : <Link to="/login">Login</Link>
+      }
       </div>
     </div>
   );
