@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import classes from './Users.module.css';
 
 const Users = props => {
     const pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
@@ -12,14 +13,17 @@ const Users = props => {
             <div>
                 { pages.map(p => (
                     <span 
-                    className={props.currenPage === p ? "" : " "}
+                    className={props.currentPage === p ? classes.bold : " "}
                     onClick={() => props.onPageChangeHandler(p)}
+                    key={p}
                     >
                     {p}  </span>
                 ))}
             </div>
             {
-                props.users.map(user => (
+                props.users.map(user => {
+                    console.log(user);
+                return (
                     <div key={user.id} style={{ display: 'flex' }}>
                         <span>
                             <Link to={`/profile/${user.id}`}>
@@ -28,9 +32,9 @@ const Users = props => {
                                 </div>
                             </Link>
                             {
-                                user.subscribed 
-                                ? <button onClick={() => props.unfollow(user.id)}>Unfollow</button>
-                                : <button onClick={() => props.follow(user.id)}>Follow</button>
+                                user.followed
+                                ? <button disabled={props.followingInProgress.some(id => id === user.id )} onClick={() => props.unfollow(user.id)}>Unfollow</button>
+                                : <button disabled={props.followingInProgress.some(id => id === user.id )} onClick={() => props.follow(user.id)}>Follow</button>
                             }
                         </span>
                         <span>
@@ -42,7 +46,7 @@ const Users = props => {
                             <div>{"user.location.country"}</div>
                         </span>
                     </div>
-                ))
+                )})
            }
         </div>
     )

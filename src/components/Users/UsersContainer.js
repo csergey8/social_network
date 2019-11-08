@@ -1,36 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Users from './Users';
-import axios from 'axios';
-import { followActionCreator, unfollowActionCreator, getUsersActionCreator, setCurrentPageActionCreator, setTotalUsersCountActionCreator, toggleIsFetchingActionCreator} from '../../redux/reducers/usersReducer';
+import { getUsersThunkCreator, followThunk, unfollowThunk, setCurrentPageActionCreator, toggleFollowingProgressActionCreator} from '../../redux/reducers/usersReducer';
 import Preloader from '../utils/Preloader';
 
 class UsersContainer extends React.Component {
 
     componentDidMount() {
-        this.props.toggleIsFetching();
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currenPage}&count=${this.props.pageSize}`)
-            .then(res => {
-                this.props.getUsers(res.data.items)
-                this.props.setTotalUsersCount(res.data.totalCount);
-                this.props.toggleIsFetching();
-            });
+        this.props.getUsersThunk(this.props.currentPage, this.props.pageSize);
     }
 
-    onPageChangeHandler = (p) => {
-        this.props.toggleIsFetching();
+    onPageChangeHandler = p => {
+        this.props.getUsersThunk(p , this.props.pageSize);
         this.props.setCurrentPage(p);
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${p}&count=${this.props.pageSize}`)
-            .then(res => {
-                this.props.getUsers(res.data.items);
-                this.props.toggleIsFetching();
-            });
     }
 
     render(){ 
         return (
             <div>
-                { this.props.isFetching ? <Preloader /> :<Users {...this.props} onPageChangeHandler={this.onPageChangeHandler}/>}
+                { this.props.isFetching ? <Preloader /> :<Users {...this.props} users={this.props.users} onPageChangeHandler={this.onPageChangeHandler}/>}
             </div>
         )
     }
@@ -41,16 +29,16 @@ const mapStateToProps = state => ({
         pageSize: state.usersReducer.pageSize,
         totalUsersCount: state.usersReducer.totalUsersCount,
         currentPage: state.usersReducer.currentPage,
-        isFetching: state.usersReducer.isFetching
+        isFetching: state.usersReducer.isFetching,
+        followingInProgress: state.usersReducer.followingInProgress
 })
 
 const mapDispatchToProps = dispatch => ({
-        follow: id => dispatch(followActionCreator(id)),
-        unfollow: id => dispatch(unfollowActionCreator(id)),
-        getUsers: users => dispatch(getUsersActionCreator(users)),
+        follow: id => dispatch(followThunk(id)),
+        unfollow: id => dispatch(unfollowThunk(id)),
         setCurrentPage: page => dispatch(setCurrentPageActionCreator(page)),
-        setTotalUsersCount: count => dispatch(setTotalUsersCountActionCreator(count)),
-        toggleIsFetching: () => dispatch(toggleIsFetchingActionCreator())
+        toggleFollowingProgress: (id, isLoading) => dispatch(toggleFollowingProgressActionCreator(id, isLoading)),
+        getUsersThunk: (currentPage, pageSize) => dispatch(getUsersThunkCreator(currentPage, pageSize))
 })
 
 
