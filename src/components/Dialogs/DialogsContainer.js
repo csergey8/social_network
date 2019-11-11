@@ -1,5 +1,6 @@
 import React from 'react';
 import StoreContext from '../../StoreContext';
+import { compose } from 'redux';
 import Dialogs from './Dialogs';
 import { connect } from 'react-redux';
 import { sendMessageCreator, updateNewMessageBodyCreator } from '../../redux/reducers/dialogReducer';
@@ -30,7 +31,8 @@ import { sendMessageCreator, updateNewMessageBodyCreator } from '../../redux/red
 
 const mapStateToProps = state => {
     return {
-        dialogs: state.dialogReducer
+        dialogs: state.dialogReducer,
+        isAuth: state.authReducer.isAuth
     }
 }
 
@@ -43,8 +45,6 @@ const mapDispatchToProps = dispatch => {
             dispatch(updateNewMessageBodyCreator(body))
         }
     }
-}
+} 
 
-const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs)
-
-export default DialogsContainer;
+export default compose(connect(mapStateToProps, mapDispatchToProps))(Dialogs);

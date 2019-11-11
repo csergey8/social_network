@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import Users from './Users';
 import { getUsersThunkCreator, followThunk, unfollowThunk, setCurrentPageActionCreator, toggleFollowingProgressActionCreator} from '../../redux/reducers/usersReducer';
 import Preloader from '../utils/Preloader';
+import authRedirect from '../../hoc/authRedirect';
 
 class UsersContainer extends React.Component {
 
@@ -42,4 +44,4 @@ const mapDispatchToProps = dispatch => ({
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(UsersContainer);
+export default compose(authRedirect, connect(mapStateToProps, mapDispatchToProps))(UsersContainer);

@@ -1,6 +1,8 @@
 import React from 'react';
 import Dialog from './Dialog/Dialog';
 import DialogItem from './DialogItem/DialogItem';
+import { Redirect } from 'react-router-dom';
+import authRedirect from '../../hoc/authRedirect';
 
 const Dialogs = (props) => {
   const state = props.dialogs;
@@ -17,6 +19,7 @@ const Dialogs = (props) => {
     let body = e.target.value;
     props.updateNewMessageBody(body);
   }
+
   return (
     <div className="dialogs">
       <div>
@@ -29,4 +32,4 @@ const Dialogs = (props) => {
   );
 };
 
-export default Dialogs;
+export default authRedirect(Dialogs);

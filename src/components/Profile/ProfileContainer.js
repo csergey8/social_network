@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import axios from 'axios';
+import { compose } from 'redux';
 import Profile from './Profile';
 import { setUserProfileThunk } from '../../redux/reducers/profileReducer';
+import authRedirect from '../../hoc/authRedirect';
 
 class ProfileContainer extends React.Component {
   componentDidMount() {
@@ -24,7 +25,8 @@ class ProfileContainer extends React.Component {
 }; 
 
 const mapStateToProps = state => ({
-  profile: state.profileReducer.profile
+  profile: state.profileReducer.profile,
+  isAuth: state.authReducer.isAuth
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -33,4 +35,5 @@ const mapDispatchToProps = dispatch => ({
 
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProfileContainer));
+
+export default compose(withRouter, authRedirect, connect(mapStateToProps, mapDispatchToProps))(ProfileContainer);
