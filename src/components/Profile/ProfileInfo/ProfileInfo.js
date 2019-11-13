@@ -10,7 +10,7 @@ const ProfileInfo = props => {
     <div>
       <img src={props.profile.photos.small} />
       AVA
-      <ProfileStatus status="Hello" />
+      <ProfileStatus status={props.status}  setUserStatus={props.setUserStatus}/>
     </div>
   );
 };

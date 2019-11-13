@@ -25,8 +25,15 @@ export const usersAPI = {
         return instance.get(`profile/${id}`)
                 .then(res => res.data)
     },
+    getStatus: id => {
+        return instance.get(`profile/status/${id}`)
+    },
+    updateStatus: status => {
+        return instance.put(`profile/status`, { status })
+    },
     auth: () => {
         return instance.get('auth/me')
             .then(res => res.data)
-    }
+    },
+
 }

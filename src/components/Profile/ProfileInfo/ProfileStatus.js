@@ -2,22 +2,47 @@ import React from 'react'
 import Profile from '../Profile'
 
 class ProfileStatus extends React.Component {
+
     state = {
-        editMode: true
+        editMode: false,
+        status: this.props.status 
     }
 
-    editModeHandler = () => {
-        debugger;
-        this.setState({ editMode: !this.state.editMode })
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.status !== this.props.status) {
+            this.setState({
+                status: this.props.status
+            })
+        }
     }
+
+    activateEditModeHandler = () => {
+        this.setState({
+            editMode: true
+        })
+    }
+
+    deactivateEditModeHandler = () => {
+        this.setState({
+            editMode: false
+        })
+        this.props.setUserStatus(this.state.status)
+        
+    }
+
+    inputStatusHandler = e => {
+        this.setState({
+            status: e.target.value
+        })
+    } 
 
     render() {
         return (
             <div>
                 {
-                    this.state.editMode ?
-                    <span onClick={this.editModeHandler}>{this.props.status}</span>
-                    : <input autoFocus={true} onBlur={this.editModeHandler} value={this.props.status}/>
+                    !this.state.editMode ?
+                    <span onClick={this.activateEditModeHandler}>{this.props.status || "No Status"}</span>
+                    : <input autoFocus={true} onBlur={this.deactivateEditModeHandler} value={this.state.status} onChange={this.inputStatusHandler} />
                 }
             </div>
         )

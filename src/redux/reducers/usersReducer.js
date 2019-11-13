@@ -9,13 +9,15 @@ const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_FOLLOWING_PROGRESS = 'TOGGLE_FOLLOWING_PROGRESS'; 
 
 
+
 const initialState = {
     users: [],
     pageSize: 5,
     totalUsersCount: 0,
     currentPage: 1,
     isFetching: false,
-    followingInProgress: []
+    followingInProgress: [],
+    status: null
 }
 const UsersReducer = (state = initialState, action) => {
 
@@ -63,7 +65,6 @@ const UsersReducer = (state = initialState, action) => {
                 isFetching: !state.isFetching
             }
         case TOGGLE_FOLLOWING_PROGRESS:
-            console.log(action.id)
             return {
                 ...state,
                 followingInProgress: action.isLoading ?
@@ -118,4 +119,5 @@ export const unfollowThunk = id => dispatch => {
                 dispatch(toggleFollowingProgressActionCreator(id, false))
             })
 }
+
 

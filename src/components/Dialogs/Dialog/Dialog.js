@@ -4,7 +4,7 @@ import Message from '../Message/Message';
 const Dialog = props => {
   return (
     <div>
-      <Message text="Text" />
+      <Message text={props.message} />
     </div>
   );
 };
