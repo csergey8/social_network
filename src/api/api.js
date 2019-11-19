@@ -35,5 +35,11 @@ export const usersAPI = {
         return instance.get('auth/me')
             .then(res => res.data)
     },
-
+    login: (email, password, rememberMe) => {
+        const body = { email, password, rememberMe }
+        return instance.post('auth/login', body)
+    },
+    logout: () => {
+        return instance.delete('auth/login')
+    }
 }
