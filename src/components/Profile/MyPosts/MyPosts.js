@@ -4,19 +4,26 @@ import { reduxForm, Field } from 'redux-form';
 import { required, maxLengthCreator } from '../../../utils/validators';
 import { Textarea } from '../../Forms/FormsControl';
 
-const MyPosts = props => {
-  const onAddPost = post => {
-    props.addPost(post)
-  }
+class MyPosts extends React.Component {
 
-  const postsRender = props.posts.map(post => <Post key={post.message} message={post.message} likesCount={post.likesCount} />)
-  return (
-    <div>
-      <h1>My Posts</h1>
-      <AddNewPostReduxForm onSubmit={onAddPost} />
-      { postsRender }
-    </div>
-  );
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps !== this.props || nextState !== this.state
+  }
+  
+  render() {
+    const postsRender = this.props.posts.map(post => <Post key={post.message} message={post.message} likesCount={post.likesCount} />)
+    const onAddPost = post => {
+      this.props.addPost(post)
+    }
+    return (
+      <div>
+        <h1>My Posts</h1>
+        <AddNewPostReduxForm onSubmit={onAddPost} />
+        { postsRender }
+      </div>
+    );
+  }
+  
 };
 
 const maxLength10 = maxLengthCreator(10);

@@ -4,6 +4,7 @@ const ADD_POST = "ADD_POST";
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const GET_STATUS = 'GET_STATUS';
 const SET_STATUS = 'SET_STATUS';
+const DELETE_POST = 'DELETE_POST';
 
 const initialState = {
   posts: [
@@ -46,7 +47,12 @@ const profileReducer = (state = initialState, action) => {
       return {
         ...state,
         status: action.status
-      }  
+      } 
+    case DELETE_POST: 
+      return {
+        ...state,
+        posts: state.posts.filter(post => post.id !== action.id)
+      }
     default:
       return state;
   }
@@ -56,6 +62,7 @@ export const addPostActionCreator = post => ({type: ADD_POST, post });
 export const setUserProfileActionCreator = data => ({ type: SET_USER_PROFILE, profile: data})
 export const getStatusActionCreator = data => ({ type: GET_STATUS, status: data.data });
 export const setStatusActionCreator = status => ({ type: SET_STATUS, status })
+export const deletePostActionCreator = id => ({ type: DELETE_POST, id})
 
 
 export const setUserProfileThunk = id => dispatch => {
