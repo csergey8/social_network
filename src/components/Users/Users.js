@@ -1,28 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import classes from './Users.module.css';
+import Paginator from './Paginator';
 
 const Users = props => {
-    const pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
-        const pages = [];
-        for(let i = 1; i <= pagesCount; i++){
-            pages.push(i)
-    }
     return (
         <div>
             <div>
-                { pages.map(p => (
-                    <span 
-                    className={props.currentPage === p ? classes.bold : " "}
-                    onClick={() => props.onPageChangeHandler(p)}
-                    key={p}
-                    >
-                    {p}  </span>
-                ))}
+                <Paginator {...props}/>
             </div>
             {
                 props.users.map(user => {
-                    console.log(user);
                 return (
                     <div key={user.id} style={{ display: 'flex' }}>
                         <span>

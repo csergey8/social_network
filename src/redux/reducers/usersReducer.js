@@ -7,6 +7,7 @@ const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 const SET_TOTAL_USERS_COUNT = 'SET_TOTAL_USERS_COUNT';
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const TOGGLE_FOLLOWING_PROGRESS = 'TOGGLE_FOLLOWING_PROGRESS'; 
+const SET_PORTION_NUMBER  = 'SET_PORTION_NUMBER';
 
 
 
@@ -15,6 +16,7 @@ const initialState = {
     pageSize: 5,
     totalUsersCount: 0,
     currentPage: 1,
+    portionNumber: 1,
     isFetching: false,
     followingInProgress: [],
     status: null
@@ -54,6 +56,11 @@ const UsersReducer = (state = initialState, action) => {
                 ...state,
                 currentPage: action.page
             }
+        case SET_PORTION_NUMBER:
+            return {
+                ...state,
+                portionNumber: action.num
+            }
         case SET_TOTAL_USERS_COUNT:
             return {
                 ...state,
@@ -86,6 +93,7 @@ export const setCurrentPageActionCreator = page => ({ type: SET_CURRENT_PAGE, pa
 export const setTotalUsersCountActionCreator = count => ({ type: SET_TOTAL_USERS_COUNT, count })
 export const toggleIsFetchingActionCreator = () => ({ type: TOGGLE_IS_FETCHING });
 export const toggleFollowingProgressActionCreator = (id, isLoading) => ({ type: TOGGLE_FOLLOWING_PROGRESS, id, isLoading })
+export const setPortionNumberActionCreator = num => ({ type: SET_PORTION_NUMBER, num})
 
 export const getUsersThunkCreator = (currentPage, pageSize) => dispatch => {
         dispatch(setCurrentPageActionCreator(currentPage));

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import Users from './Users';
-import { getUsersThunkCreator, followThunk, unfollowThunk, setCurrentPageActionCreator, toggleFollowingProgressActionCreator} from '../../redux/reducers/usersReducer';
+import { getUsersThunkCreator, followThunk, unfollowThunk, setCurrentPageActionCreator, toggleFollowingProgressActionCreator, setPortionNumberActionCreator} from '../../redux/reducers/usersReducer';
 import Preloader from '../../utils/Preloader';
 import authRedirect from '../../hoc/authRedirect';
 import { getUsers, getPageSize, totalUsersCount, getCurrentPage, getIsFetching, getFollowingInProgress } from '../../redux/reducers/usersSelectors';
@@ -40,10 +40,11 @@ class UsersContainer extends React.Component {
 const mapStateToProps = state => ({
         users: getUsers(state),
         pageSize: getPageSize(state),
-        totalUsersCount: totalUsersCount(state),
+        totalItemsCount: totalUsersCount(state),
         currentPage: getCurrentPage(state),
         isFetching: getIsFetching(state),
-        followingInProgress: getFollowingInProgress(state)
+        followingInProgress: getFollowingInProgress(state),
+        portionNumber: state.usersReducer.portionNumber
 })
 
 
@@ -52,7 +53,8 @@ const mapDispatchToProps = dispatch => ({
         unfollow: id => dispatch(unfollowThunk(id)),
         setCurrentPage: page => dispatch(setCurrentPageActionCreator(page)),
         toggleFollowingProgress: (id, isLoading) => dispatch(toggleFollowingProgressActionCreator(id, isLoading)),
-        getUsersThunk: (currentPage, pageSize) => dispatch(getUsersThunkCreator(currentPage, pageSize))
+        getUsersThunk: (currentPage, pageSize) => dispatch(getUsersThunkCreator(currentPage, pageSize)),
+        setPortionNumber: num => dispatch(setPortionNumberActionCreator(num))
 })
 
 
