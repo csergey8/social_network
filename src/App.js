@@ -2,7 +2,7 @@ import React from "react";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import Navbar from "./components/Navbar/Navbar";
 import ProfileContainer from "./components/Profile/ProfileContainer";
-import DialogsContainer from "./components/Dialogs/DialogsContainer";
+//import DialogsContainer from "./components/Dialogs/DialogsContainer";
 import UsersContainer from './components/Users/UsersContainer';
 import Login from './components/Login/Login';
 import { Route, BrowserRouter } from "react-router-dom";
@@ -14,6 +14,7 @@ import { withRouter } from 'react-router-dom';
 import { appInitThunk } from './redux/reducers/appReducer';
 import "./App.css";
 import Preloader from "./utils/Preloader";
+const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 
 class App extends React.Component {
   componentDidMount() {
@@ -29,7 +30,7 @@ class App extends React.Component {
           <Navbar />
           <div className="content">
             <Route path="/profile/:id?" render={() => <ProfileContainer />} />
-            <Route path="/dialogs" render={() => <DialogsContainer />} />
+            <Route path="/dialogs" render={() => <React.Suspense fallback={<div>Loading...</div>}><DialogsContainer /></React.Suspense>} />
             <Route path="/users" render={() => <UsersContainer />} />
             <Route path="/login" render={() => <Login />} />
           </div>

@@ -6,18 +6,35 @@ const GET_STATUS = 'GET_STATUS';
 const SET_STATUS = 'SET_STATUS';
 const DELETE_POST = 'DELETE_POST';
 
-const initialState = {
+type PostType = {
+  id: number, 
+  message: string, 
+  likesCount: number
+}
+
+type ProfileType = {
+
+}
+
+export type InitialStateType = {
+  posts: Array<PostType>
+  newPostText: string
+  profile: null | ProfileType 
+  status: null
+}
+
+const initialState: InitialStateType = {
   posts: [
     {id: 1, message: 'Sup', likesCount: 10},
     {id: 2, message: 'Hi', likesCount: 12},
     {id: 3, message: 'Yo', likesCount: 9}
    ],
   newPostText: "",
-  profile: null,
+  profile: null as ProfileType | null,
   status: null
 }
 
-const profileReducer = (state = initialState, action) => {
+const profileReducer = (state = initialState, action: any): InitialStateType => {
   switch (action.type) {
     case ADD_POST:
       const newPost = {
