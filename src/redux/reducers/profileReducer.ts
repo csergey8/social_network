@@ -12,8 +12,28 @@ type PostType = {
   likesCount: number
 }
 
-type ProfileType = {
+type ContactsType = {
+  github: string
+  vk: string
+  facebook: string
+  instagram: string  
+  twitter: string
+  website: string
+  youtube: string
+  mainLink: string
+}
 
+type ProfileType = {
+  userId: number
+  lookingForAJob: boolean
+  lookingForAJobDescription: string
+  fullName: string
+  contacts: ContactsType
+}
+
+type PhotosType = {
+  small: string | null
+  large: string | null
 }
 
 export type InitialStateType = {
