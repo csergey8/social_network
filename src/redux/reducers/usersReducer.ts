@@ -1,4 +1,6 @@
 import { usersAPI } from '../../api/api';
+import { ProfileType, PostType, ContactsType, PhotosType, UserType } from '../types';
+
 
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
@@ -12,17 +14,19 @@ const SET_PORTION_NUMBER  = 'SET_PORTION_NUMBER';
 
 
 const initialState = {
-    users: [],
+    users: [] as Array<UserType>,
     pageSize: 5,
     totalUsersCount: 0,
     currentPage: 1,
     portionNumber: 1,
     isFetching: false,
-    followingInProgress: [],
+    followingInProgress: [] as Array<number>,
     status: null
 }
-const UsersReducer = (state = initialState, action) => {
 
+type InitialStateType = typeof initialState
+
+const UsersReducer = (state: InitialStateType = initialState, action: any): InitialStateType => {
     switch (action.type) {
         case FOLLOW:
             return {
@@ -84,18 +88,56 @@ const UsersReducer = (state = initialState, action) => {
     }
 }
 
-export default UsersReducer;
+type FollowActionCreatorType = {
+    type: typeof FOLLOW,
+    id: number
+}
 
-export const followActionCreator = id => ({ type: FOLLOW, id })
-export const unfollowActionCreator = id => ({ type: UNFOLLOW, id})
-export const getUsersActionCreator = users => ({ type: GET_USERS, users })
-export const setCurrentPageActionCreator = page => ({ type: SET_CURRENT_PAGE, page })
-export const setTotalUsersCountActionCreator = count => ({ type: SET_TOTAL_USERS_COUNT, count })
-export const toggleIsFetchingActionCreator = () => ({ type: TOGGLE_IS_FETCHING });
-export const toggleFollowingProgressActionCreator = (id, isLoading) => ({ type: TOGGLE_FOLLOWING_PROGRESS, id, isLoading })
-export const setPortionNumberActionCreator = num => ({ type: SET_PORTION_NUMBER, num})
+type UnfollowActionCreatorType = {
+    type: typeof UNFOLLOW,
+    id: number
+}
 
-export const getUsersThunkCreator = (currentPage, pageSize) => dispatch => {
+type GetUsersActionCreator = {
+    type: typeof GET_USERS,
+    users: Array<UserType>
+}
+
+type SetCurrentPageActionCreatorType = {
+    type: typeof SET_CURRENT_PAGE,
+    page: number
+}
+
+type SetTotalUsersCountActionCreatorType = {
+    type: typeof SET_TOTAL_USERS_COUNT,
+    count: number
+}
+
+type ToggleIsFetchingActionCreatorType = {
+    type: typeof TOGGLE_IS_FETCHING
+}
+
+type ToggleFollowingProgressActionCreatorType = {
+    type: typeof TOGGLE_FOLLOWING_PROGRESS,
+    id: number,
+    isLoading: boolean
+}
+
+type SetPortionNumberActionCreatorType = {
+    type: typeof SET_PORTION_NUMBER,
+    num: number
+}
+
+export const followActionCreator = (id: number): FollowActionCreatorType => ({ type: FOLLOW, id })
+export const unfollowActionCreator = (id: number): UnfollowActionCreatorType => ({ type: UNFOLLOW, id})
+export const getUsersActionCreator = (users: Array<UserType>): GetUsersActionCreator => ({ type: GET_USERS, users })
+export const setCurrentPageActionCreator = (page: number): SetCurrentPageActionCreatorType => ({ type: SET_CURRENT_PAGE, page })
+export const setTotalUsersCountActionCreator = (count: number): SetTotalUsersCountActionCreatorType => ({ type: SET_TOTAL_USERS_COUNT, count })
+export const toggleIsFetchingActionCreator = (): ToggleIsFetchingActionCreatorType => ({ type: TOGGLE_IS_FETCHING });
+export const toggleFollowingProgressActionCreator = (id: number, isLoading: boolean): ToggleFollowingProgressActionCreatorType => ({ type: TOGGLE_FOLLOWING_PROGRESS, id, isLoading })
+export const setPortionNumberActionCreator = (num: number): SetPortionNumberActionCreatorType => ({ type: SET_PORTION_NUMBER, num})
+
+export const getUsersThunkCreator = (currentPage: number, pageSize: number) => (dispatch: any) => {
         dispatch(setCurrentPageActionCreator(currentPage));
         dispatch(toggleIsFetchingActionCreator())
         usersAPI.getUsers(currentPage, pageSize)
@@ -106,7 +148,7 @@ export const getUsersThunkCreator = (currentPage, pageSize) => dispatch => {
             });
 };
 
-export const followThunk = id => dispatch => {
+export const followThunk = (id: number) => (dispatch: any) => {
     dispatch(toggleFollowingProgressActionCreator(id, true))
         usersAPI.follow(id)
             .then(data => {
@@ -117,7 +159,7 @@ export const followThunk = id => dispatch => {
             })
 }
 
-export const unfollowThunk = id => dispatch => {
+export const unfollowThunk = (id: number) => (dispatch: any) => {
     dispatch(toggleFollowingProgressActionCreator(id, true))
         usersAPI.unfollow(id)
             .then(data => {
@@ -129,3 +171,4 @@ export const unfollowThunk = id => dispatch => {
 }
 
 
+export default UsersReducer;
