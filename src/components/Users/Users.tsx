@@ -2,15 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import classes from './Users.module.css';
 import Paginator from './Paginator';
+import { UserType } from '../../redux/types';
 
-const Users = props => {
+const Users = (props: any) => {
     return (
         <div>
             <div>
                 <Paginator {...props}/>
             </div>
             {
-                props.users.map(user => {
+                props.users.map((user: any) => {
                 return (
                     <div key={user.id} style={{ display: 'flex' }}>
                         <span>
@@ -21,8 +22,8 @@ const Users = props => {
                             </Link>
                             {
                                 user.followed
-                                ? <button disabled={props.followingInProgress.some(id => id === user.id )} onClick={() => props.unfollow(user.id)}>Unfollow</button>
-                                : <button disabled={props.followingInProgress.some(id => id === user.id )} onClick={() => props.follow(user.id)}>Follow</button>
+                                ? <button disabled={props.followingInProgress.some((id: number) => id === user.id )} onClick={() => props.unfollow(user.id)}>Unfollow</button>
+                                : <button disabled={props.followingInProgress.some((id: number) => id === user.id )} onClick={() => props.follow(user.id)}>Follow</button>
                             }
                         </span>
                         <span>
