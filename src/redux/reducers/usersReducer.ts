@@ -1,5 +1,8 @@
 import { usersAPI } from '../../api/api';
 import { ProfileType, PostType, ContactsType, PhotosType, UserType } from '../types';
+import { AppStateType } from '../store';
+import { Dispatch } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 
 
 const FOLLOW = 'FOLLOW';
@@ -26,7 +29,10 @@ const initialState = {
 
 type InitialStateType = typeof initialState
 
-const UsersReducer = (state: InitialStateType = initialState, action: any): InitialStateType => {
+type ActionsType = FollowActionCreatorType | UnfollowActionCreatorType | GetUsersActionCreator | SetCurrentPageActionCreatorType | 
+    SetTotalUsersCountActionCreatorType | ToggleIsFetchingActionCreatorType | ToggleFollowingProgressActionCreatorType | SetPortionNumberActionCreatorType
+
+const UsersReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
         case FOLLOW:
             return {
@@ -137,7 +143,9 @@ export const toggleIsFetchingActionCreator = (): ToggleIsFetchingActionCreatorTy
 export const toggleFollowingProgressActionCreator = (id: number, isLoading: boolean): ToggleFollowingProgressActionCreatorType => ({ type: TOGGLE_FOLLOWING_PROGRESS, id, isLoading })
 export const setPortionNumberActionCreator = (num: number): SetPortionNumberActionCreatorType => ({ type: SET_PORTION_NUMBER, num})
 
-export const getUsersThunkCreator = (currentPage: number, pageSize: number) => (dispatch: any) => {
+type GetStateType = () => AppStateType
+
+export const getUsersThunkCreator = (currentPage: number, pageSize: number) => (dispatch: Dispatch<ActionsType>, getState: GetStateType) => {
         dispatch(setCurrentPageActionCreator(currentPage));
         dispatch(toggleIsFetchingActionCreator())
         usersAPI.getUsers(currentPage, pageSize)
@@ -148,7 +156,7 @@ export const getUsersThunkCreator = (currentPage: number, pageSize: number) => (
             });
 };
 
-export const followThunk = (id: number) => (dispatch: any) => {
+export const followThunk = (id: number): ThunkAction<void, AppStateType, unknown, ActionsType> => (dispatch, getState) => {
     dispatch(toggleFollowingProgressActionCreator(id, true))
         usersAPI.follow(id)
             .then(data => {
@@ -159,7 +167,7 @@ export const followThunk = (id: number) => (dispatch: any) => {
             })
 }
 
-export const unfollowThunk = (id: number) => (dispatch: any) => {
+export const unfollowThunk = (id: number): ThunkAction<void, AppStateType, unknown, ActionsType> => (dispatch) => {
     dispatch(toggleFollowingProgressActionCreator(id, true))
         usersAPI.unfollow(id)
             .then(data => {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classes from './Users.module.css';
 
-type Props = {
+type PropsTypes = {
     totalItemsCount: number,
     pageSize: number,
     currentPage: number,
@@ -10,7 +10,7 @@ type Props = {
     onPageChangeHandler: (num: any) => void
 }
 
-const Paginator: React.FC<Props> = ({ totalItemsCount, pageSize, currentPage, portionNumber, setPortionNumber, onPageChangeHandler}) => {
+const Paginator: React.FC<PropsTypes> = ({ totalItemsCount, pageSize, currentPage, portionNumber, setPortionNumber, onPageChangeHandler}) => {
     const pagesCount = Math.ceil(totalItemsCount / pageSize);
         const pages = [];
         for(let i = 1; i <= pagesCount; i++){

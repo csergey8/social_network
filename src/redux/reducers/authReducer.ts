@@ -1,5 +1,7 @@
 import { usersAPI } from '../../api/api';
 import { stopSubmit } from 'redux-form';
+import { ThunkAction } from 'redux-thunk';
+import { AppStateType } from '../store';
 
 const SET_AUTH_USER_DATA = 'SET_AUTH_USER_DATA';
 
@@ -48,8 +50,9 @@ type SetAuthUserDataActionCreatorType = {
 export const setAuthUserDataActionCreator = 
     ({ id , email, login, isAuth = true }: any): SetAuthUserDataActionCreatorType => ({ type: SET_AUTH_USER_DATA, data: {id, email, login }, isAuth })
 
+type AuthActionCreatorType = SetAuthUserDataActionCreatorType 
 
-export const authThunk = () => async (dispatch: any) => {
+export const authThunk = (): ThunkAction<Promise<void>, AppStateType, unknown, AuthActionCreatorType> => async (dispatch) => {
     const response = await usersAPI.auth() 
     if(response.resultCode === 0) {
         dispatch(setAuthUserDataActionCreator(response.data))
@@ -69,7 +72,7 @@ export const loginThunk = (email: string, password: string ,rememberMe = false) 
         })
 }
 
-export const logoutThunk = () =>(dispatch: any) => {
+export const logoutThunk = (): ThunkAction<void, AppStateType, unknown, AuthActionCreatorType> =>(dispatch: any) => {
     usersAPI.logout()
         .then(data => {
             if(data.data.resultCode === 0) {

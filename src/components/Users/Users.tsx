@@ -4,7 +4,12 @@ import classes from './Users.module.css';
 import Paginator from './Paginator';
 import { UserType } from '../../redux/types';
 
-const Users = (props: any) => {
+type PropsTypes = {
+    users: Array<UserType>,
+    onPageChangeHandler: (p: number) => void
+}
+
+const Users: React.FC<PropsTypes> = (props: any) => {
     return (
         <div>
             <div>
