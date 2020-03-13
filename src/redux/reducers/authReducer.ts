@@ -1,4 +1,4 @@
-import { usersAPI } from '../../api/api';
+import { usersAPI, ResultCodeEnum } from '../../api/api';
 import { stopSubmit } from 'redux-form';
 import { ThunkAction } from 'redux-thunk';
 import { AppStateType } from '../store';
@@ -53,9 +53,9 @@ export const setAuthUserDataActionCreator =
 type AuthActionCreatorType = SetAuthUserDataActionCreatorType 
 
 export const authThunk = (): ThunkAction<Promise<void>, AppStateType, unknown, AuthActionCreatorType> => async (dispatch) => {
-    const response = await usersAPI.auth() 
-    if(response.resultCode === 0) {
-        dispatch(setAuthUserDataActionCreator(response.data))
+    const res = await usersAPI.auth() 
+    if(res.resultCode === ResultCodeEnum.Success) {
+        dispatch(setAuthUserDataActionCreator(res.data))
     }
         
 }
@@ -63,7 +63,7 @@ export const authThunk = (): ThunkAction<Promise<void>, AppStateType, unknown, A
 export const loginThunk = (email: string, password: string ,rememberMe = false) => (dispatch: any) => {
     usersAPI.login(email, password, rememberMe)
         .then(data => {
-            if(data.data.resultCode === 0) {
+            if(data.data.resultCode === ResultCodeEnum.Success) {
                 dispatch(authThunk());
             } else {
                 let errorMsg = data.data.messages.length > 0 ? data.data.messages[0] : "Error"
@@ -75,7 +75,7 @@ export const loginThunk = (email: string, password: string ,rememberMe = false) 
 export const logoutThunk = (): ThunkAction<void, AppStateType, unknown, AuthActionCreatorType> =>(dispatch: any) => {
     usersAPI.logout()
         .then(data => {
-            if(data.data.resultCode === 0) {
+            if(data.data.resultCode === ResultCodeEnum.Success) {
                 dispatch(setAuthUserDataActionCreator({id: null, email: null, login: null, isAuth: false}))
             }
         })
