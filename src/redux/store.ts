@@ -22,6 +22,10 @@ let reducers = combineReducers({
   form: formReducer
 });
 
+type PropertiesTypes<T> = T extends {[key: string]: infer U} ? U : never
+
+export type InfernActionsTypes<T extends {[key: string]: (...args: any[]) => any}> = ReturnType<PropertiesTypes<T>> 
+
 const createStoreWithMiddleware = applyMiddleware(ReduxThunk)(createStore)
 
 //@ts-ignore
