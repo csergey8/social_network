@@ -3,7 +3,7 @@ import StoreContext from '../../StoreContext';
 import { compose } from 'redux';
 import Dialogs from './Dialogs';
 import { connect } from 'react-redux';
-import { sendMessageCreator } from '../../redux/reducers/dialogReducer';
+import { actions } from '../../redux/reducers/dialogReducer';
 
 // const DialogsContainer = () => {
 //     return (
@@ -39,7 +39,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         sendMessage: message => {
-            dispatch(sendMessageCreator(message))
+            dispatch(actions.sendMessageCreator(message))
         }
     }
 } 

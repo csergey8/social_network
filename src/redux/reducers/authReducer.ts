@@ -1,9 +1,19 @@
 import { usersAPI, ResultCodeEnum } from '../../api/api';
 import { stopSubmit } from 'redux-form';
 import { ThunkAction } from 'redux-thunk';
-import { AppStateType } from '../store';
+import { AppStateType, InfernActionsTypes, BaseThunkType } from '../store';
+import { Action } from 'redux';
 
 const SET_AUTH_USER_DATA = 'SET_AUTH_USER_DATA';
+
+export const actions = {
+    setAuthUserDataActionCreator: 
+    ({ id , email, login, isAuth = true }: any) => ({ type: SET_AUTH_USER_DATA, data: {id, email, login }, isAuth } as const), 
+}
+
+export type ActionsType = InfernActionsTypes<typeof actions>
+
+type ThunkType = BaseThunkType<ActionsType | ReturnType<typeof stopSubmit>>
 
 export type InitialStateType ={
     id: number | null
@@ -21,7 +31,7 @@ const initialState: InitialStateType = {
      captchaUrl: null
 }
 
-const authReducer = (state: InitialStateType = initialState, action: any): InitialStateType => {
+const authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
         case SET_AUTH_USER_DATA:
             return {
@@ -35,32 +45,15 @@ const authReducer = (state: InitialStateType = initialState, action: any): Initi
     }
 }
 
-type SetAuthUserDataActionCreatorPayloadType = {
-    id: number,
-    email: string,
-    login: string
-}
-
-type SetAuthUserDataActionCreatorType = {
-    type: typeof SET_AUTH_USER_DATA
-    data: SetAuthUserDataActionCreatorPayloadType
-    isAuth: boolean
-}
-
-export const setAuthUserDataActionCreator = 
-    ({ id , email, login, isAuth = true }: any): SetAuthUserDataActionCreatorType => ({ type: SET_AUTH_USER_DATA, data: {id, email, login }, isAuth })
-
-type AuthActionCreatorType = SetAuthUserDataActionCreatorType 
-
-export const authThunk = (): ThunkAction<Promise<void>, AppStateType, unknown, AuthActionCreatorType> => async (dispatch) => {
+export const authThunk = (): ThunkType => async (dispatch) => {
     const res = await usersAPI.auth() 
     if(res.resultCode === ResultCodeEnum.Success) {
-        dispatch(setAuthUserDataActionCreator(res.data))
+        dispatch(actions.setAuthUserDataActionCreator(res.data))
     }
         
 }
 
-export const loginThunk = (email: string, password: string ,rememberMe = false) => (dispatch: any) => {
+export const loginThunk = (email: string, password: string ,rememberMe = false): ThunkType => async (dispatch) => {
     usersAPI.login(email, password, rememberMe)
         .then(data => {
             if(data.data.resultCode === ResultCodeEnum.Success) {
@@ -72,11 +65,11 @@ export const loginThunk = (email: string, password: string ,rememberMe = false) 
         })
 }
 
-export const logoutThunk = (): ThunkAction<void, AppStateType, unknown, AuthActionCreatorType> =>(dispatch: any) => {
+export const logoutThunk = (): ThunkType => async (dispatch) => {
     usersAPI.logout()
         .then(data => {
             if(data.data.resultCode === ResultCodeEnum.Success) {
-                dispatch(setAuthUserDataActionCreator({id: null, email: null, login: null, isAuth: false}))
+                dispatch(actions.setAuthUserDataActionCreator({id: null, email: null, login: null, isAuth: false}))
             }
         })
 }

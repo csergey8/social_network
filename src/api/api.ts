@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { UserType } from '../redux/types';
 
-const instance = axios.create({
+export const instance = axios.create({
     withCredentials: true,
     baseURL: 'https://social-network.samuraijs.com/api/1.0/',
     headers: {
@@ -13,7 +14,7 @@ export enum ResultCodeEnum {
     Error = 1
 }
 
-type AuthType = {
+export type AuthType = {
     data: {
         id: number,
         email: string,
@@ -23,12 +24,24 @@ type AuthType = {
     messages: Array<string>
 }
 
-type AuthLoginType = {
+export type AuthLoginType = {
     data: { 
         userId: number
     },
     resultCode: ResultCodeEnum,
     messages: Array<string>
+}
+
+export type GetItemsType = {
+  items: UserType[]
+  totalCount: number
+  error: string | null
+}
+
+export type ResponseType<D = {}, RC = ResultCodeEnum> = {
+  data: D
+  messages: Array<string>
+  resultCode: RC
 }
 
 export const usersAPI = {

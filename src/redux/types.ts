@@ -8,8 +8,8 @@ export type ProfileType = {
 }
   
 export type PostType = {
-  id: number, 
-  message: string, 
+  id: number
+  message: string
   likesCount: number
 }
 
@@ -30,8 +30,8 @@ export type PhotosType = {
 }
 
 export type UserType = {
-  id: number,
-  name: string,
-  status: string,
-  photos: PhotosType,
+  id: number
+  name: string
+  status: string
+  photos: PhotosType
 }

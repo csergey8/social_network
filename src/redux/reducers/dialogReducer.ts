@@ -1,3 +1,5 @@
+import { BaseThunkType, InfernActionsTypes } from "../store";
+
 const SEND_MESSAGE = "SEND_MESSAGE";
 
 export type InitialStateType = typeof initialState
@@ -12,6 +14,10 @@ type MessagesType = {
   text: string
 }
 
+type ThunkType = BaseThunkType<ActionTypes>
+
+type ActionTypes = InfernActionsTypes<typeof actions>
+
 const initialState = {
   dialogs: [
     { id: 1, name: 'David' },
@@ -25,7 +31,7 @@ const initialState = {
   ] as Array<MessagesType>
 };
 
-const dialogReducer = (state = initialState, action: SendMessageCreatorType): InitialStateType => {
+const dialogReducer = (state = initialState, action: ActionTypes ): InitialStateType => {
 
   switch (action.type) {
     case SEND_MESSAGE:
@@ -37,16 +43,11 @@ const dialogReducer = (state = initialState, action: SendMessageCreatorType): In
     default:
       return state;
   }
-};
+}; 
 
-type SendMessageCreatorType = {
-  type: typeof SEND_MESSAGE,
-  message: {
-    newMessageBody: string
-  }
-
+export const actions = {
+  sendMessageCreator: (message: any) => ({ type: SEND_MESSAGE, message } as const)
 }
 
-export const sendMessageCreator = (message: any): SendMessageCreatorType => ({ type: SEND_MESSAGE, message });
 
 export default dialogReducer;
